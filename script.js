@@ -50,6 +50,7 @@ function calc ()
 	var p_err_bit;
 	var pow_req_dbm;
 	var pow_margin_db;
+	var pow_noise_w, pow_noise_dbm;
 	var plot_att, plot_att_data, plot_att_chart;
 	
 	pow_tx_w = parseFloat(document.getElementById("in-pow-tx").value);
@@ -75,6 +76,9 @@ function calc ()
 	pow_margin_db = pow_rx_dbm - pow_req_dbm;
 	
 	bandwidth = data_rate / spectral_eff;
+	
+	pow_noise_w = bandwidth * n0;
+	pow_noise_dbm = 10*Math.log10(pow_noise_w * 1000);
 	
 	plot_att_chart = new google.visualization.LineChart(plot_att);
 	plot_att_data = new google.visualization.DataTable();
@@ -109,6 +113,7 @@ function calc ()
 	document.getElementById("out-pow-margin").value = pow_margin_db.toFixed(2);
 	document.getElementById("out-wavelength").value = wavelength.toFixed(3);
 	document.getElementById("out-bandwidth").value = bandwidth;
+	document.getElementById("out-pow-noise").value = pow_noise_dbm.toFixed(2);
 }
 
 function erf (x)
