@@ -43,14 +43,13 @@ function calc ()
 	var gain_rx_dbi;
 	var dist_m;
 	var path_loss_db;
-	var freq, wavelength;
+	var freq, wavelength, bandwidth;
 	var data_rate;
 	var ebn0_db, ebn0_ww;
 	var noise_figure_db;
 	var p_err_bit;
 	var pow_req_dbm;
 	var pow_margin_db;
-	var bandwidth;
 	var plot_att, plot_att_data, plot_att_chart;
 	
 	pow_tx_w = parseFloat(document.getElementById("in-pow-tx").value);
@@ -108,6 +107,7 @@ function calc ()
 	document.getElementById("out-p-err-bit").value = (p_err_bit * 100).toFixed(5);
 	document.getElementById("out-pow-req").value = pow_req_dbm.toFixed(2);
 	document.getElementById("out-pow-margin").value = pow_margin_db.toFixed(2);
+	document.getElementById("out-wavelength").value = wavelength.toFixed(3);
 	document.getElementById("out-bandwidth").value = bandwidth;
 }
 
