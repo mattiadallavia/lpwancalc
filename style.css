@@ -1,0 +1,12 @@
+body
+{
+	font-size: 10pt;
+	line-height: 1.25;
+	padding-top: 10px;
+}
+
+#plot-att
+{
+	width: 100%;
+	height: 400px;
+}
