@@ -5,7 +5,6 @@ var temp = 290; // (K)
 var n0 = kb * temp;
 
 google.charts.load('current', {packages: ['corechart', 'line']});
-
 var plot_att_options =
 {
 	hAxis: {
@@ -26,7 +25,10 @@ var plot_att_options =
 		minorGridlines: { count: 0 },
 		baselineColor: '#ccc'
 	},
-	series: { 1: { color: 'black', pointSize: 5 } },
+	series: {
+		1: { color: 'black', pointSize: 5 },
+		2: { color: 'black', lineWidth: 1.5, lineDashStyle: [4, 4] }
+	},
 	enableInteractivity: false,
 	legend: { position: 'none' },
 	chartArea: { top: 10, right: 20, bottom: 80, left: 50, width: '100%', height: '100%' }
@@ -66,10 +68,16 @@ function calc ()
 	
 	pow_rx_dbm = pow_tx_dbm + gain_tx_dbi + gain_rx_dbi + path_loss_db;
 	
+	p_err_bit = 1/2 * erfc(Math.sqrt(ebn0_ww/2));
+	
+	pow_req_dbm = ebn0_db + 10*Math.log10(data_rate * n0 * 1000) + noise_figure_db;
+	pow_margin_db = pow_rx_dbm - pow_req_dbm;
+	
 	plot_att_chart = new google.visualization.LineChart(plot_att);
 	plot_att_data = new google.visualization.DataTable();
     plot_att_data.addColumn('number');
     plot_att_data.addColumn('number');
+	plot_att_data.addColumn('number');
 	plot_att_data.addColumn('number');
 	
 	for (var d = 0; d <= 10000; d += 100)
@@ -79,17 +87,14 @@ function calc ()
 		pl = 20*Math.log10(wavelength / (4*Math.PI * d));
 		prx = pow_tx_dbm + gain_tx_dbi + gain_rx_dbi + pl;
 
-		plot_att_data.addRow([d, prx, null]);
+		plot_att_data.addRow([d, prx, null, null]);
 	}
 	
-	plot_att_data.addRow([dist_m, null, pow_rx_dbm]);
+	plot_att_data.addRow([dist_m, null, pow_rx_dbm, null]);
+	plot_att_data.addRow([0, null, null, pow_req_dbm]);
+	plot_att_data.addRow([10000, null, null, pow_req_dbm]);
 	
 	plot_att_chart.draw(plot_att_data, plot_att_options);
-	
-	p_err_bit = 1/2 * erfc(Math.sqrt(ebn0_ww/2));
-	
-	pow_req_dbm = ebn0_db + 10*Math.log10(data_rate * n0 * 1000) + noise_figure_db;
-	pow_margin_db = pow_rx_dbm - pow_req_dbm;
 	
 	document.getElementById("out-pow-tx").value = pow_tx_dbm.toFixed(2);
 	document.getElementById("out-gain-tx").value = gain_tx_dbi;
