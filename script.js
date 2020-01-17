@@ -1,6 +1,7 @@
 var c = 299792458; // Speed of light (m/s)
 var kb = 1.38064852 * 10e-23; // Boltzmann constant
 var temp = 290; // (K)
+var spectral_eff = 0.5;
 
 var n0 = kb * temp;
 
@@ -49,6 +50,7 @@ function calc ()
 	var p_err_bit;
 	var pow_req_dbm;
 	var pow_margin_db;
+	var bandwidth;
 	var plot_att, plot_att_data, plot_att_chart;
 	
 	pow_tx_w = parseFloat(document.getElementById("in-pow-tx").value);
@@ -72,6 +74,8 @@ function calc ()
 	
 	pow_req_dbm = ebn0_db + 10*Math.log10(data_rate * n0 * 1000) + noise_figure_db;
 	pow_margin_db = pow_rx_dbm - pow_req_dbm;
+	
+	bandwidth = data_rate / spectral_eff;
 	
 	plot_att_chart = new google.visualization.LineChart(plot_att);
 	plot_att_data = new google.visualization.DataTable();
@@ -104,6 +108,7 @@ function calc ()
 	document.getElementById("out-p-err-bit").value = (p_err_bit * 100).toFixed(5);
 	document.getElementById("out-pow-req").value = pow_req_dbm.toFixed(2);
 	document.getElementById("out-pow-margin").value = pow_margin_db.toFixed(2);
+	document.getElementById("out-bandwidth").value = bandwidth;
 }
 
 function erf (x)
