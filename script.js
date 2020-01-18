@@ -80,8 +80,6 @@ function calc ()
 	pow_noise_w = bandwidth * n0;
 	pow_noise_dbm = 10*Math.log10(pow_noise_w * 1000);
 	
-	console.log(n0);
-	
 	plot_att_chart = new google.visualization.LineChart(plot_att);
 	plot_att_data = new google.visualization.DataTable();
     plot_att_data.addColumn('number');
